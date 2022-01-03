@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import image from "./images/login-image.png";
+import { axiosWithAuth } from "./axiosWithAuth";
+import ErrorModal from "./ErrorModal";
 
 export default function Login() {
+  const navigate = useNavigate()
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""
   });
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const changeValue = e => setLoginData({...loginData, [e.target.name]: e.target.value});
-
   const isDisabled = () => !loginData.email || !loginData.password;
-  
   const onLogin = (event) => {
-    console.log("here")
-    window.location.reload()
     event.preventDefault();
-  //   // props.addSmurfData(props.form);
-    axios.post(`https://api.jobboard.tedbree.com/v1/login`, loginData)
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err.response)
-    });
+    axiosWithAuth()
+      .post('/login', loginData)
+      .then(res => {
+        localStorage.setItem("token", res.data.token);
+        navigate("/myjobs")
+      })
+      .catch(() => setShowErrorModal(true));
   }
 
   return (
@@ -56,26 +55,13 @@ export default function Login() {
             <path d="M95.876 11.7534C95.2402 11.7534 94.6332 11.6714 94.0552 11.5074C93.4868 11.3434 93.0436 11.1311 92.7257 10.8706L93.3471 9.77074C93.6457 10.0119 94.0311 10.2049 94.5032 10.3496C94.9849 10.4847 95.4858 10.5522 96.0061 10.5522C96.6612 10.5522 97.1573 10.4557 97.4945 10.2628C97.8413 10.0602 98.0148 9.78039 98.0148 9.42341C98.0148 9.13397 97.8751 8.92654 97.5957 8.80112C97.3259 8.6757 96.902 8.55027 96.324 8.42485C95.7845 8.30907 95.3413 8.1933 94.9945 8.07752C94.6573 7.9521 94.3683 7.75914 94.1274 7.49864C93.8866 7.2285 93.7662 6.8667 93.7662 6.41325C93.7662 5.91156 93.9059 5.47257 94.1852 5.0963C94.4743 4.72003 94.8789 4.43059 95.3991 4.22799C95.929 4.02538 96.5408 3.92408 97.2344 3.92408C97.745 3.92408 98.2412 3.98679 98.7229 4.11221C99.2046 4.23763 99.5995 4.40647 99.9078 4.61873L99.3587 5.7186C99.06 5.51599 98.7132 5.36645 98.3182 5.26997C97.9232 5.16384 97.5186 5.11077 97.1043 5.11077C96.4781 5.11077 95.9964 5.2169 95.6592 5.42916C95.3221 5.63176 95.1535 5.90673 95.1535 6.25406C95.1535 6.56279 95.2932 6.7847 95.5725 6.91977C95.8519 7.04519 96.2855 7.17061 96.8731 7.29604C97.403 7.41181 97.8365 7.52759 98.1737 7.64336C98.5109 7.75914 98.7951 7.94727 99.0263 8.20777C99.2672 8.46826 99.3876 8.82041 99.3876 9.26422C99.3876 10.0457 99.0649 10.6584 98.4194 11.1022C97.7835 11.5363 96.9358 11.7534 95.876 11.7534Z" fill="white" />
           </svg>
         </div>
-
         <p className="font-extrabold font-Gilroy text-5xl mx-20 text-white">Find the best candidates for your organisation.</p>
-        {/* <svg width="538" height="351" viewBox="0 0 538 351" fill="none" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
-          <rect width="538" height="351" fill="url(#pattern0)"/>
-          <defs>
-          <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-          <use href="#image0_180_35" transform="translate(-0.0219331) scale(0.00165169 0.00253165)"/>
-          </pattern>
-          </defs>
-        </svg> */}
-        <img src={image} />
-
+        <img src={image} alt="interview ongoing" width="80%"/>
       </div>
-      {/* <svg width="205" height="1020" viewBox="0 0 205 1020" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg className="absolute ml-[40%]" width="205" height="1020" viewBox="0 0 205 1020" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M115.623 -1H205L65.2595 1020H0L115.623 -1Z" fill="#F57D7D"/>
-      </svg> */}
-
-
+      </svg>
       <div className="w-1/2 text-3xl flex justify-center items-center">
-        {/* <div> */}
         <svg className="absolute top-[50px] right-[-7px]" width="87" height="80" viewBox="0 0 87 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50C0 22.3858 22.3858 0 50 0C77.6142 0 100 22.3858 100 50ZM5.20842 50C5.20842 74.7377 25.2623 94.7916 50 94.7916C74.7377 94.7916 94.7916 74.7377 94.7916 50C94.7916 25.2623 74.7377 5.20842 50 5.20842C25.2623 5.20842 5.20842 25.2623 5.20842 50Z" fill="#62BECB" />
         </svg>
@@ -85,7 +71,6 @@ export default function Login() {
         <svg className="absolute top-[150px] right-[90px]" width="50" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M50 25C50 38.8071 38.8071 50 25 50C11.1929 50 0 38.8071 0 25C0 11.1929 11.1929 0 25 0C38.8071 0 50 11.1929 50 25ZM2.60421 25C2.60421 37.3689 12.6311 47.3958 25 47.3958C37.3689 47.3958 47.3958 37.3689 47.3958 25C47.3958 12.6311 37.3689 2.60421 25 2.60421C12.6311 2.60421 2.60421 12.6311 2.60421 25Z" fill="#62BECB" />
         </svg>
-        {/* </div> */}
         <div>
           <form className="text-[#0F4A7B]" onSubmit={onLogin}>
             <h3 className="mb-6 font-bold">Login</h3>
@@ -103,6 +88,11 @@ export default function Login() {
           </form>
         </div>
       </div>
+      <>
+        {showErrorModal ? (
+          <ErrorModal setShowModal={setShowErrorModal}/>
+        ) : null}
+      </>
     </div>
   );
 }

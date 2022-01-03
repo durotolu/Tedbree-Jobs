@@ -1,7 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import JobList from "./Jobs/JobList"
+import MyJobsList from "./MyJobs/MyJobsList"
 import Login from "./Login"
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
     <Routes>
       <Route exact path="/" element={<JobList />} />
       <Route exact path="/login" element={<Login />} />
+      <Route path="/myjobs" element={!localStorage.getItem("token") ? <Navigate to="/login" /> : <MyJobsList />} />
     </Routes>
   );
 }
