@@ -2,8 +2,10 @@
 
 Apply for jobs online
 
-> Aa hypothetical platform where users can sign in with their basic information and post jobs, seeking applicanats.
+> An hypothetical platform where users can sign in with their basic information and post jobs, seeking applicanats.
+> 
 > The users can view their posted jobs and make edits. 
+> 
 > Applicants can view jobs posted by users and apply to them.
 
 ## Built with ReactJS and Tailwind
